@@ -1,7 +1,11 @@
 ## Logos 9 snap package
+- Uses hand-picked version of wine for best compatibility.
+- Makes use of wine-runtime snap to minimize snap size and reduce maintenance burden.
+- Downloads Logos-x64.msi installer from Faithlife, unless already present in ~/Downloads.
 
-### Download packages
+### Download snap package (until registered in Snap Store)
 ```bash
+# <ServerIP> available on request.
 rsync -r -t -v --progress -u --partial -s rsync://<ServerIP>/snaps/logos9_0.1_amd64.snap .
 ```
 or use grsync with source as: "rsync://<ServerIP>/snaps/logos9_0.1_amd64.snap"
@@ -9,10 +13,12 @@ and your preferred destination.
 
 ### Install wine and logos9 packages
 ```bash
+# "--dangerous" needed until available in Snap Store.
+# "--devmode" needed until confinement is worked out.
 sudo snap install --devmode --dangerous ./logos9_0.1_amd64.snap
 ```
 
-### Run app (installs Logos and dependencies on 1st run [up to 1.3 to 1.5 GB])
+### Run app (installs Logos and dependencies on 1st run [will download up to 1.3 to 1.5 GB])
 ```bash
 logos9
 # OR
