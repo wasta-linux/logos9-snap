@@ -33,7 +33,7 @@ apps:
 
   indexer:
     extensions: [gnome-3-28]
-    command: bin/sommelier run-exe /user:$LOGOS_USER_ID /lang:$LOGOS_USER_LANG
+    command: bin/sommelier run-exe
     environment:
       RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosIndexer.exe"
 
@@ -63,14 +63,6 @@ plugs:
     interface: content
     target: $SNAP/wine-runtime
     default-provider: wine-platform-runtime
-  # wine-6-stable: # number must match the number in default-provider
-  # wine-6-staging: # need >=6.6 for dotnet48; stable only at 6.0.2 on 2021-11-19
-  # wine-6-logos:
-  #   interface: content
-  #   target: $SNAP/wine-platform
-  #   # default-provider: wine-platform-6-stable # must be a valid snap
-  #   # default-provider: wine-platform-6-staging # need >=6.6 for dotnet48; stable only at 6.0.2 on 2021-11-19
-  #   default-provider: wine-platform-6-logos # use wasta-controlled wine version
 
 parts:
   sommelier-core:
