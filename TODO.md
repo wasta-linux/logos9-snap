@@ -1,3 +1,7 @@
-- logos9.indexer needs:
-  - /user:<logosuserprofile> /lang:<logosuserlang>
-  - e.g. /user:r5bcyw1q.bdw /lang:fr-FR
+- do basic functionality checks
+  - internet connection
+  - printing?
+- register snap at snapcraft.io
+- set up auto-build from git repo
+- iron out confinement issues
+- announce it on linux users list, etc.
