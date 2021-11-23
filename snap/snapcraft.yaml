@@ -1,6 +1,6 @@
 name: logos9
 base: core18
-version: '0.1'
+version: '9.9.0.0011/6.17'
 summary: Install and run Logos 9 via wine.
 description: |
   Install and run Logos 9 via wine.
