@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Use local Logos-x64.msi in user Downloads folder if present.
+dl_dir=$(xdg-user-dir DOWNLOAD)
+if [[ -e "${dl_dir}/Logos-x64.msi" ]]; then
+    # Unset INSTALL_URL from snapcraft.yaml.
+    export INSTALL_URL=
+    # Set INSTALL_EXE.
+    export INSTALL_EXE="${dl_dir}/Logos-x64.msi"
+fi

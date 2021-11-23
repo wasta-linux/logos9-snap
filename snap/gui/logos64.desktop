@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Logos Bible Software (64-bit)
+Comment=Logos9 64-bit snap package
+Exec=/snap/bin/logos9
+Icon=${SNAP}/meta/gui/logos9-icon-180.png
+Terminal=false
+Type=Application
+Categories=Education;
+StartupWMClass=logos.exe

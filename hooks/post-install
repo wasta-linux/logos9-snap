@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Update registry settings.
+# Set Wine to Vista for Logos indexer.
+"${WINELOADER}" reg add "HKCU\\Software\\Wine\\AppDefaults\\LogosIndexer.exe" \
+    /v Version /t REG_SZ /d vista /f
+
+# If ~/.logos-data exists, ask user if they want to link to it.
+#   NOTE: $HOME for a snap is set to $HOME/snap/logos9/current,
+#     have to be explicit for real $HOME.
+LOGOS_DATA="/home/$USER/.logos-data"
+LOGOS_INSTALL_DIR=$(find "$SNAP_USER_COMMON" -name Logos -type d | grep -v Faithlife)
+if [[ -d "$LOGOS_DATA" || -L "$LOGOS_DATA" ]]; then
+    yad --title="Use existing folder?" --width=400 --center --auto-kill \
+        --button=gtk-no:1 --button=gtk-yes:0 --borders=15 \
+        --text="You have a Logos data folder at $LOGOS_DATA. Do you want to link this installation to it?"
+    use_logos_data=$?
+    if [[ $use_logos_data -eq 0 ]]; then
+        # Symlink to $LOGOS_DATA.
+        content_dirs=( "Data" "Documents" "Users" )
+        for d in "${content_dirs[@]}"; do
+            rm -rf "${LOGOS_INSTALL_DIR}/${d}"
+            ln -s "$LOGOS_DATA/${d}" "${LOGOS_INSTALL_DIR}/${d}"
+        done
+    fi
+fi

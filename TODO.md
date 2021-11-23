@@ -1,0 +1,3 @@
+- logos9.indexer needs:
+  - /user:<logosuserprofile> /lang:<logosuserlang>
+  - e.g. /user:r5bcyw1q.bdw /lang:fr-FR

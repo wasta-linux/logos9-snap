@@ -1,0 +1,148 @@
+name: logos9
+base: core18
+version: '0.1'
+summary: Install and run Logos9 via wine.
+description: |
+  Install and run Logos9 via wine.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+environment:
+  TRICKS: "dotnet48 corefonts ddr=gdi fontsmooth=rgb"
+  WINEDLLOVERRIDES: "mscoree,mshtml=" # Prevent pop-ups about Wine Mono and Wine Gecko
+
+apps:
+  logos9:
+    extensions: [gnome-3-28]
+    command: bin/sommelier run-exe
+    environment:
+      # RUN_EXE: "C:/users/$USER/Local Settings/Application Data/Logos/Logos.exe"
+      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/Logos.exe"
+      INSTALL_URL: https://downloads.logoscdn.com/LBS9/Installer/9.9.0.0011/Logos-x64.msi
+      INSTALL_FLAGS: /silent # optional commandline flags to pass to the installer
+    plugs:
+      - home
+      - network
+
+  init:
+    extensions: [gnome-3-28]
+    command: bin/sommelier
+    environment:
+      INIT: '1'
+
+  indexer:
+    extensions: [gnome-3-28]
+    command: bin/sommelier run-exe /user:$LOGOS_USER_ID /lang:$LOGOS_USER_LANG
+    environment:
+      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosIndexer.exe"
+
+  wine:
+    extensions: [gnome-3-28]
+    command: bin/sommelier
+    plugs:
+      - home
+      - network
+
+  winecfg:
+    extensions: [gnome-3-28]
+    command: bin/sommelier winecfg
+    # plugs:
+      # - home
+      # - network
+
+  winetricks:
+    extensions: [gnome-3-28]
+    command: bin/sommelier winetricks
+    plugs:
+      - home
+      - network
+
+plugs:
+  wine-runtime:
+    interface: content
+    target: $SNAP/wine-runtime
+    default-provider: wine-platform-runtime
+  # wine-6-stable: # number must match the number in default-provider
+  # wine-6-staging: # need >=6.6 for dotnet48; stable only at 6.0.2 on 2021-11-19
+  # wine-6-logos:
+  #   interface: content
+  #   target: $SNAP/wine-platform
+  #   # default-provider: wine-platform-6-stable # must be a valid snap
+  #   # default-provider: wine-platform-6-staging # need >=6.6 for dotnet48; stable only at 6.0.2 on 2021-11-19
+  #   default-provider: wine-platform-6-logos # use wasta-controlled wine version
+
+parts:
+  sommelier-core:
+    plugin: make
+    # source: https://github.com/snapcrafters/sommelier-core.git
+    source: https://github.com/n8marti/sommelier-core.git # use own repo until PR#26 is merged
+    # source-branch: "1.0" # omit to use "master"
+    override-prime: |
+      snapcraftctl prime
+
+      # Fix WINE_PLATFORM b/c not using wine-platform snap.
+      sed -r -i 's|(WINE_PLATFORM="$SNAP/wine-platform/wine)-$WINE_RELEASE"|\1-staging|' bin/sommelier
+
+      # Don't let yad dialogs stay always-on-top.
+      sed -r -i 's|(yad.*) --on-top|\1|g' bin/sommelier
+      # Remove annoying yad dialog for interactive MSI install.
+      sed -r -i 's|(yes.*Installing .*EXE_NAME.*)|# \1|' bin/sommelier
+      sed -r -i 's|(.*INSTALL_YAD_PID)|# \1|g' bin/sommelier
+
+      # Add init-only command.
+      sed -r -i 's|(\s+)(init_wine)$|\1\2\n\1if [[ $INIT == '1' ]]; then exit 0; fi|' bin/sommelier
+
+  wine:
+    plugin: nil
+    build-packages:
+      - dpkg
+      - wget
+    override-build: |
+      snapcraftctl build
+
+      ARCH="$(dpkg --print-architecture)"
+      # WINE_VER="$(wget -qO- https://dl.winehq.org/wine-builds/ubuntu/dists/bionic/main/binary-amd64/ | grep wine-staging | sed 's|_| |g;s|~| |g' | awk '{print $5}' | tail -n1)"
+      WINE_VER="6.17"
+
+      # set snap version
+      snapcraftctl set-version "$WINE_VER"
+
+      # wget and dpkg extract the wine debs
+      ## supporting binaries which are arch-specific but the same filenames in both architectures so we only install the native architecture
+      DEB_URLS="https://dl.winehq.org/wine-builds/ubuntu/dists/bionic/main/binary-${ARCH}/wine-staging_${WINE_VER}~bionic-1_${ARCH}.deb"
+
+      ## wine loaders - this one is the native system architecture
+      DEB_URLS="$DEB_URLS https://dl.winehq.org/wine-builds/ubuntu/dists/bionic/main/binary-${ARCH}/wine-staging-${ARCH}_${WINE_VER}~bionic-1_${ARCH}.deb"
+
+      if [ "$ARCH" = "amd64" ]; then
+        ## on amd64 builds we need to also bundle the i386 wine loaders
+        DEB_URLS="$DEB_URLS https://dl.winehq.org/wine-builds/ubuntu/dists/bionic/main/binary-i386/wine-staging-i386_${WINE_VER}~bionic-1_i386.deb"
+      fi
+
+      for DEB_URL in ${DEB_URLS}; do
+        DEB=$(basename "${DEB_URL}")
+        echo "Downloading ${DEB_URL}..."
+        wget --quiet "${DEB_URL}" -O "${SNAPCRAFT_PART_INSTALL}/${DEB}"
+        echo "Unpacking ${DEB}..."
+        dpkg -x "${SNAPCRAFT_PART_INSTALL}/${DEB}" ${SNAPCRAFT_PART_INSTALL}
+        rm -f "${SNAPCRAFT_PART_INSTALL}/${DEB}"
+      done
+
+      # Cleanup
+      rm -rf ${SNAPCRAFT_PART_INSTALL}/opt/wine-staging/share/applications
+      rm -rf ${SNAPCRAFT_PART_INSTALL}/opt/wine-staging/share/man
+      rm -rf ${SNAPCRAFT_PART_INSTALL}/usr
+
+      # Disable winemenubuilder
+      sed -i 's/winemenubuilder.exe -a -r/winemenubuilder.exe -r/g' "${SNAPCRAFT_PART_INSTALL}"/opt/wine-staging/share/wine/wine.inf
+    organize:
+      opt/wine-staging: wine-platform/
+
+  hooks:
+    plugin: dump
+    source: hooks/
+    organize:
+      "*": sommelier/hooks/
+    stage:
+      - sommelier
