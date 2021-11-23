@@ -82,7 +82,7 @@ parts:
       snapcraftctl prime
 
       # Fix WINE_PLATFORM b/c not using wine-platform snap.
-      sed -r -i 's|(WINE_PLATFORM="$SNAP/wine-platform/wine)-$WINE_RELEASE"|\1-staging|' bin/sommelier
+      sed -r -i 's|(WINE_PLATFORM="\$SNAP/wine-platform/wine)(-\$WINE_RELEASE)|\1-staging|' bin/sommelier
 
       # Don't let yad dialogs stay always-on-top.
       sed -r -i 's|(yad.*) --on-top|\1|g' bin/sommelier
