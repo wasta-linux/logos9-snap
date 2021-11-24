@@ -28,6 +28,7 @@ apps:
       - network
       - network-manager-observe
       - process-control
+      - system-observe
       - udisks2
 
   init:
