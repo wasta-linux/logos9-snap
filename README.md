@@ -3,7 +3,17 @@
 - Makes use of wine-runtime snap to minimize snap size and reduce maintenance burden.
 - Downloads Logos-x64.msi installer from Faithlife, unless already present in ~/Downloads.
 
-### Download snap package (until registered in Snap Store)
+### Install snap package
+```bash
+# Option "--devmode" needed until confinement is worked out.
+# Use "--edge" to get auto-built (untested) version or "--beta" to get beta version.
+sudo snap install logos9 --devmode --beta
+# If logos9 is already installed from the unpublished snap, "--amend" is needed
+#   to switch to Snap Store version.
+sudo snap refresh logos9 --devmode --beta --amend
+```
+
+### OLD METHOD: Download unpublished snap package
 ```bash
 # <ServerIP> available on request.
 rsync -r -t -v --progress -u --partial -s rsync://<ServerIP>/snaps/logos9_0.1_amd64.snap .
@@ -11,9 +21,9 @@ rsync -r -t -v --progress -u --partial -s rsync://<ServerIP>/snaps/logos9_0.1_am
 or use grsync with source as: "rsync://<ServerIP>/snaps/logos9_0.1_amd64.snap"
 and your preferred destination.
 
-### Install wine and logos9 packages
+### OLD METHOD: Install wine and logos9 packages
 ```bash
-# "--dangerous" needed until available in Snap Store.
+# "--dangerous" needed when installing apart from Snap Store.
 # "--devmode" needed until confinement is worked out.
 sudo snap install --devmode --dangerous ./logos9_0.1_amd64.snap
 ```

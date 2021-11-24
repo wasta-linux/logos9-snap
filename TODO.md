@@ -1,7 +1,10 @@
 - do basic functionality checks
-  - internet connection
-  - printing?
-- register snap at snapcraft.io
-- set up auto-build from git repo
-- iron out confinement issues
-- announce it on linux users list, etc.
+  - [ ] app launches from app menu
+  - [x] pop-up windows work
+  - [x] internet connection
+  - [x] sound
+  - [ ] printing?
+- [x] register snap at snapcraft.io
+- [x] set up auto-build from git repo
+- [ ] iron out confinement issues
+- [ ] announce it on linux users list, etc.
