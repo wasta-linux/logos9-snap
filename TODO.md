@@ -1,9 +1,11 @@
 - do basic functionality checks
-  - [ ] app launches from app menu
+  - [x] app launches from app menu
   - [x] pop-up windows work
   - [x] internet connection
   - [x] sound
   - [ ] printing?
+- [ ] add a way to get installed Logos version from commandline
+- [ ] enable to use LogosUpdater.exe from commandline; e.g. logos9.updater
 - [x] register snap at snapcraft.io
 - [x] set up auto-build from git repo
 - [ ] iron out confinement issues
