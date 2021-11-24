@@ -42,6 +42,12 @@ apps:
     environment:
       RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosIndexer.exe"
 
+  updater:
+    extensions: [gnome-3-28]
+    command: bin/sommelier run-exe
+    environment:
+      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosUpdater.exe"
+
   wine:
     extensions: [gnome-3-28]
     command: bin/sommelier
@@ -70,6 +76,11 @@ plugs:
     default-provider: wine-platform-runtime
 
 parts:
+  logos:
+    plugin: nil
+    stage-packages:
+      - wget
+
   sommelier-core:
     plugin: make
     # source: https://github.com/snapcrafters/sommelier-core.git
