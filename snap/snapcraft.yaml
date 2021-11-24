@@ -26,6 +26,9 @@ apps:
     plugs:
       - home
       - network
+      - network-manager-observe
+      - process-control
+      - udisks2
 
   init:
     extensions: [gnome-3-28]
