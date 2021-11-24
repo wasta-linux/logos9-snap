@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Logos Bible Software
 Comment=Logos 9 snap package
-Exec=/snap/bin/logos9
+Exec=logos9
 Icon=${SNAP}/meta/gui/logos9-icon-180.png
 Terminal=false
 Type=Application
