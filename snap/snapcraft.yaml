@@ -43,14 +43,20 @@ apps:
     environment:
       RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosIndexer.exe"
 
+  system:
+    extensions: [gnome-3-28]
+    command: bin/sommelier run-exe
+    environment:
+      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
+
   updater:
     extensions: [gnome-3-28]
     command: bin/sommelier run-exe
     environment:
       RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosUpdater.exe"
     plugs:
-      - home
-      - network
+      # - home
+      # - network
 
   wine:
     extensions: [gnome-3-28]
@@ -70,7 +76,7 @@ apps:
     extensions: [gnome-3-28]
     command: bin/sommelier winetricks
     plugs:
-      - home
+      # - home
       - network
 
 plugs:
