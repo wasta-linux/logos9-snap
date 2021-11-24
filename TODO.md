@@ -4,9 +4,8 @@
   - [x] internet connection
   - [x] sound
   - [ ] printing?
-- [ ] add a way to get installed Logos version from commandline
+- [ ] try launching with Logos/System/Logos.exe under confinement
+- [ ] use ~/logos-data instead of ~/.logos-data to get around needing special plug approval
 - [ ] enable to use LogosUpdater.exe from commandline; e.g. logos9.updater
-- [x] register snap at snapcraft.io
-- [x] set up auto-build from git repo
 - [ ] iron out confinement issues
 - [ ] announce it on linux users list, etc.
