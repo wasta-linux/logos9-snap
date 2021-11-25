@@ -19,7 +19,8 @@ apps:
     extensions: [gnome-3-28]
     command: bin/sommelier run-exe
     environment:
-      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/Logos.exe"
+      # RUN_EXE: "C:/users/$USER/AppData/Local/Logos/Logos.exe"
+      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
       INSTALL_URL: https://downloads.logoscdn.com/LBS9/Installer/9.9.0.0011/Logos-x64.msi
       INSTALL_FLAGS: /silent # optional commandline flags to pass to the installer
     plugs:

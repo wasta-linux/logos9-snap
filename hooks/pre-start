@@ -17,13 +17,30 @@ if [[ "${ACTION_ARGS[$1]}" == '--version' ]]; then
 fi
 
 # Handle alternative executables.
-if [[ $(basename "$RUN_EXE") == 'LogosIndexer.exe' ]]; then
+LOGOS_INSTALL_DIR=$(find "$SNAP_USER_COMMON" -name Logos -type d | grep -v Faithlife)
+EXE_DIR_PATH=$(dirname "$RUN_EXE")
+EXE_DIR_NAME=$(basename "$EXE_DIR_PATH")
+EXE=$(basename "$RUN_EXE")
+STRICT=1
+cat /etc/fstab 2>/dev/null >/dev/null # 2>&1 >/dev/null doesn't work for some reason
+if [[ $? -eq 0 ]]; then
+    STRICT=0
+fi
+if [[ "$EXE_DIR_NAME" == 'System' && "$EXE" == 'Logos.exe' && ! -e "${LOGOS_INSTALL_DIR}/Users/UserMetadata" && "$STRICT" -eq 1 ]]; then
+    # First run initial Logos.exe if no Logos/Users/UserMetadata file and if
+    #   running under strict confinement.
+    run_exe="C:/users/$USER/AppData/Local/Logos/Logos.exe"
+    exe_dir_path=$(dirname "${run_exe}")
+    exe=$(basename "${run_exe}")
+    cd "${exe_dir_path}"
+    echo "Starting Logos/Logos.exe before running Logos/System/Logos.exe..."
+    "$WINELOADER" "$exe"
+elif [[ "$EXE" == 'LogosIndexer.exe' ]]; then
     # Get user ID and Language info for LogosIndexer.exe.
-    LOGOS_INSTALL_DIR=$(find "$SNAP_USER_COMMON" -name Logos -type d | grep -v Faithlife)
     LOGOS_USER_ID=$(sed -r 's|.*"id":"([0-9a-z\.]{3,})",.*|\1|' "${LOGOS_INSTALL_DIR}/Users/UserMetadata")
     LOGOS_USER_LANG=$(grep 'ResourceTitleLanguage' "${SNAP_USER_COMMON}/.wine/user.reg" | awk -F= '{print $2}' | tr -d '"')
     # export LOGOS_USER_LANG=$(grep 'ResourceTitleLanguage' "${SNAP_USER_COMMON}/.wine/user.reg" | sed -r 's|"ResourceTitleLanguage"="(.*)"|\1|')
     ACTION_ARGS=( "/user:$LOGOS_USER_ID" "/lang:$LOGOS_USER_LANG" )
-elif [[ $(basename "$RUN_EXE") == 'LogosUpdater.exe' ]]; then
+elif [[ "$EXE" == 'LogosUpdater.exe' ]]; then
     echo "WARNING: Running LogosUpdater.exe is currently experimental."
 fi
