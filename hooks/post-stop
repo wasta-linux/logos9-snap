@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ $exit_code -ne 0 && $(basename "$app_dir") == 'Logos' && "$app" == 'Logos.exe' ]]; then
+    # Logos/Logos.exe failed to run Logos/System/Logos.exe. Run it directly.
+    echo "Logos/Logos.exe failed to terminate correctly. Exit code: $exit_code"
+    RUN_EXE="C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
+    app_dir=$(dirname "${RUN_EXE}")
+    app=$(basename "${RUN_EXE}")
+    cd "${app_dir}"
+    echo "Starting Logos/System/Logos.exe..."
+    "$WINELOADER" "$app"
+    local exit_code="$?"
+fi
