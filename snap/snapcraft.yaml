@@ -54,7 +54,7 @@ apps:
     command: bin/sommelier run-exe
     environment:
       RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosUpdater.exe"
-    plugs:
+    # plugs:
       # - home
       # - network
 
