@@ -26,15 +26,19 @@ cat /etc/fstab 2>/dev/null >/dev/null # 2>&1 >/dev/null doesn't work for some re
 if [[ $? -eq 0 ]]; then
     STRICT=0
 fi
-if [[ "$EXE_DIR_NAME" == 'System' && "$EXE" == 'Logos.exe' && ! -e "${LOGOS_INSTALL_DIR}/Users/UserMetadata" && "$STRICT" -eq 1 ]]; then
-    # First run initial Logos.exe if no Logos/Users/UserMetadata file and if
-    #   running under strict confinement.
-    run_exe="C:/users/$USER/AppData/Local/Logos/Logos.exe"
-    exe_dir_path=$(dirname "${run_exe}")
-    exe=$(basename "${run_exe}")
-    cd "${exe_dir_path}"
-    echo "Starting Logos/Logos.exe before running Logos/System/Logos.exe..."
-    "$WINELOADER" "$exe"
+if [[ "$EXE_DIR_NAME" == 'Logos' && "$EXE" == 'Logos.exe' ]]; then
+    # Typical logos9 launch. Check if first run.
+    if [[ ! -e "${LOGOS_INSTALL_DIR}/Users/UserMetadata" && "$STRICT" -eq 1 ]]; then
+        # Extra launch on first run if no Logos/Users/UserMetadata file and
+        #   if running under strict confinement.
+        cd "$EXE_DIR_PATH"
+        echo "Finishing setup with Logos/Logos.exe before later switching to Logos/System/Logos.exe."
+        "$WINELOADER" "$EXE"
+    fi
+    # Switch to running Logos/System/Logos.exe.
+    echo "Starting Logos/System/Logos.exe."
+    RUN_EXE="C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
+    RUN_EXE=$("$WINELOADER" winepath "$RUN_EXE")
 elif [[ "$EXE" == 'LogosIndexer.exe' ]]; then
     # Get user ID and Language info for LogosIndexer.exe.
     LOGOS_USER_ID=$(sed -r 's|.*"id":"([0-9a-z\.]{3,})",.*|\1|' "${LOGOS_INSTALL_DIR}/Users/UserMetadata")
