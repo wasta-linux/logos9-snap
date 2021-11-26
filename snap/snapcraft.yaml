@@ -66,6 +66,9 @@ apps:
     plugs:
       - home
       - network
+      - process-control
+      - system-observe
+      - system-trace
 
   winecfg:
     extensions: [gnome-3-28]
