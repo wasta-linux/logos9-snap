@@ -17,7 +17,8 @@ if [[ "${ACTION_ARGS[$1]}" == '--version' ]]; then
 fi
 
 # Handle alternative executables.
-LOGOS_INSTALL_DIR=$(find "$SNAP_USER_COMMON" -name Logos -type d | grep -v Faithlife)
+# LOGOS_INSTALL_DIR=$(find "$SNAP_USER_COMMON" -name Logos -type d | grep -v Faithlife)
+LOGOS_INSTALL_DIR="${SNAP_USER_COMMON}/.wine/drive_c/users/$USER/AppData/Local/Logos"
 EXE_DIR_PATH=$(dirname "$RUN_EXE")
 EXE_DIR_NAME=$(basename "$EXE_DIR_PATH")
 EXE=$(basename "$RUN_EXE")
@@ -28,17 +29,18 @@ if [[ $? -eq 0 ]]; then
 fi
 if [[ "$EXE_DIR_NAME" == 'Logos' && "$EXE" == 'Logos.exe' ]]; then
     # Typical logos9 launch. Check if first run.
-    if [[ ! -e "${LOGOS_INSTALL_DIR}/Users/UserMetadata" && "$STRICT" -eq 1 ]]; then
-        # Extra launch on first run if no Logos/Users/UserMetadata file and
-        #   if running under strict confinement.
-        cd "$EXE_DIR_PATH"
-        echo "Finishing setup with Logos/Logos.exe before later switching to Logos/System/Logos.exe."
-        "$WINELOADER" "$EXE"
-    fi
+    echo "Normal launch."
+    # if [[ ! -e "${LOGOS_INSTALL_DIR}/Users/UserMetadata" && "$STRICT" -eq 1 ]]; then
+    #     # Extra launch on first run if no Logos/Users/UserMetadata file and
+    #     #   if running under strict confinement.
+    #     cd "$EXE_DIR_PATH"
+    #     echo "Finishing setup with Logos/Logos.exe before later switching to Logos/System/Logos.exe."
+    #     "$WINELOADER" "$EXE"
+    # fi
     # Switch to running Logos/System/Logos.exe.
-    echo "Starting Logos/System/Logos.exe."
-    RUN_EXE="C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
-    RUN_EXE=$("$WINELOADER" winepath "$RUN_EXE")
+    # echo "Starting Logos/System/Logos.exe."
+    # RUN_EXE="C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
+    # RUN_EXE=$("$WINELOADER" winepath "$RUN_EXE")
 elif [[ "$EXE" == 'LogosIndexer.exe' ]]; then
     # Get user ID and Language info for LogosIndexer.exe.
     LOGOS_USER_ID=$(sed -r 's|.*"id":"([0-9a-z\.]{3,})",.*|\1|' "${LOGOS_INSTALL_DIR}/Users/UserMetadata")
