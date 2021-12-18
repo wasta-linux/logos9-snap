@@ -28,6 +28,7 @@ apps:
       - home
       - network
       - network-manager-observe
+      - opengl
       - process-control
       - system-observe
       - system-trace
@@ -45,11 +46,11 @@ apps:
     environment:
       RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosIndexer.exe"
 
-  system:
-    extensions: [gnome-3-28]
-    command: bin/sommelier run-exe
-    environment:
-      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
+  # system:
+  #   extensions: [gnome-3-28]
+  #   command: bin/sommelier run-exe
+  #   environment:
+  #     RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
 
   updater:
     extensions: [gnome-3-28]
