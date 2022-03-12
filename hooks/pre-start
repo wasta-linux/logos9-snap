@@ -23,7 +23,8 @@ EXE_DIR_PATH=$(dirname "$RUN_EXE")
 EXE_DIR_NAME=$(basename "$EXE_DIR_PATH")
 EXE=$(basename "$RUN_EXE")
 STRICT=1
-cat /etc/fstab 2>/dev/null >/dev/null # 2>&1 >/dev/null doesn't work for some reason
+# cat /etc/fstab 2>/dev/null >/dev/null # 2>&1 >/dev/null doesn't work for some reason
+cat /etc/fstab >/dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     STRICT=0
 fi
