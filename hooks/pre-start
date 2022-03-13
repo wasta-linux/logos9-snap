@@ -31,18 +31,24 @@ if [[ $? -eq 0 ]]; then
 fi
 if [[ "$EXE_DIR_NAME" == 'System' && "$EXE" == 'Logos.exe' ]]; then
     # Typical logos9 launch. Check if first run.
-    echo "Normal launch; checking for user account..."
-    # Check if user account already added.
-    if [[ ! -e "${LOGOS_INSTALL_DIR}/Users/UserMetadata" && "$STRICT" -eq 1 ]]; then
-        # Extra launch on first run if no Logos/Users/UserMetadata file and
-        #   if running under strict confinement.
-        echo "No user account; finishing setup with Logos/Logos.exe."
+    if [[ ! -e "$RUN_EXE" ]]; then
+        # First run.
+        echo "First run; finishing setup with Logos/Logos.exe."
         cd "$LOGOS_INSTALL_DIR"
         "$WINELOADER" "$EXE"
     fi
+    # echo "Normal launch; checking for user account..."
+    # # Check if user account already added.
+    # if [[ ! -e "${LOGOS_INSTALL_DIR}/Users/UserMetadata" && "$STRICT" -eq 1 ]]; then
+    #     # Extra launch on first run if no Logos/Users/UserMetadata file and
+    #     #   if running under strict confinement.
+    #     echo "No user account; finishing setup with Logos/Logos.exe."
+    #     cd "$LOGOS_INSTALL_DIR"
+    #     "$WINELOADER" "$EXE"
+    # fi
     # Switch to running Logos/System/Logos.exe.
-    echo "Starting Logos/System/Logos.exe."
-    RUN_EXE=$("$WINELOADER" winepath "$RUN_EXE")
+    # echo "Starting Logos/System/Logos.exe."
+    # RUN_EXE=$("$WINELOADER" winepath "$RUN_EXE")
 elif [[ "$EXE" == 'LogosIndexer.exe' ]]; then
     # Get user ID and Language info for LogosIndexer.exe.
     LOGOS_USER_ID=$(sed -r 's|.*"id":"([0-9a-z\.]{3,})",.*|\1|' "${LOGOS_INSTALL_DIR}/Users/UserMetadata")
