@@ -34,10 +34,9 @@ if [[ "$EXE_DIR_NAME" == 'System' && "$EXE" == 'Logos.exe' ]]; then
     # Typical logos9 launch. Check if first run.
     if [[ ! -e "$RUN_EXE" ]]; then
         # First run.
-        echo "First run; finishing setup with Logos/Logos.exe."
-        # ORIG_RUN_EXE="$RUN_EXE"
-        # cd "$LOGOS_INSTALL_DIR"
-        RUN_EXE="${LOGOS_INSTALL_DIR}/Logos.exe" "$WINELOADER"
+        echo "First run; finishing setup with ${LOGOS_INSTALL_DIR}/Logos.exe."
+        cd "$LOGOS_INSTALL_DIR"
+        "$WINELOADER" "$EXE"
     fi
     # echo "Normal launch; checking for user account..."
     # # Check if user account already added.
