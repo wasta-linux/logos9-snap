@@ -29,3 +29,9 @@ if [[ -d "$LOGOS_DATA" || -L "$LOGOS_DATA" ]]; then
         done
     fi
 fi
+
+# Copy $HOME/.cache/winetricks to snap location.
+if [[ $(which rsync) && -d "${SNAP_REAL_HOME}/.cache/winetricks" ]]; then
+    mkdir -p "${SNAP_USER_COMMON}/.cache/winetricks"
+    rsync -r "${SNAP_REAL_HOME}/.cache/winetricks/" "${SNAP_USER_COMMON}/.cache/winetricks"
+fi
