@@ -23,8 +23,9 @@ LOGOS_INSTALL_DIR=$(dirname "$LOGOS_EXE")
 EXE_DIR_PATH=$(dirname "$RUN_EXE")
 EXE_DIR_NAME=$(basename "$EXE_DIR_PATH")
 EXE=$(basename "$RUN_EXE")
+
+# Determine whether running under strict confinement or not.
 STRICT=1
-# cat /etc/fstab 2>/dev/null >/dev/null # 2>&1 >/dev/null doesn't work for some reason
 cat /etc/fstab >/dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     STRICT=0
@@ -34,8 +35,9 @@ if [[ "$EXE_DIR_NAME" == 'System' && "$EXE" == 'Logos.exe' ]]; then
     if [[ ! -e "$RUN_EXE" ]]; then
         # First run.
         echo "First run; finishing setup with Logos/Logos.exe."
-        cd "$LOGOS_INSTALL_DIR"
-        "$WINELOADER" "$EXE"
+        # ORIG_RUN_EXE="$RUN_EXE"
+        # cd "$LOGOS_INSTALL_DIR"
+        RUN_EXE="${LOGOS_INSTALL_DIR}/Logos.exe" "$WINELOADER"
     fi
     # echo "Normal launch; checking for user account..."
     # # Check if user account already added.
