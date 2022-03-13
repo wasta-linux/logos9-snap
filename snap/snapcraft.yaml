@@ -94,8 +94,8 @@ plugs:
 parts:
   sommelier-core:
     plugin: make
-    # source: https://github.com/snapcrafters/sommelier-core.git
-    source: https://github.com/n8marti/sommelier-core.git # use own repo until PR#26 is merged
+    source: https://github.com/snapcrafters/sommelier-core.git
+    # source: https://github.com/n8marti/sommelier-core.git # use own repo until PR#26 is merged
     # source-branch: "1.0" # omit to use "master"
     override-prime: |
       snapcraftctl prime
