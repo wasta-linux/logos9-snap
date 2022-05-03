@@ -19,8 +19,8 @@ apps:
     extensions: [gnome-3-28]
     command: bin/sommelier run-exe
     environment:
-      # RUN_EXE: "C:/users/$USER/AppData/Local/Logos/Logos.exe"
-      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
+      RUN_EXE: "C:/users/$USER/AppData/Local/Logos/Logos.exe"
+      # RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
       INSTALL_URL: https://downloads.logoscdn.com/LBS9/Installer/9.9.0.0011/Logos-x64.msi
       # INSTALL_FLAGS: /silent # optional commandline flags to pass to the installer
     plugs:
@@ -45,12 +45,6 @@ apps:
     command: bin/sommelier run-exe
     environment:
       RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/LogosIndexer.exe"
-
-  # system:
-  #   extensions: [gnome-3-28]
-  #   command: bin/sommelier run-exe
-  #   environment:
-  #     RUN_EXE: "C:/users/$USER/AppData/Local/Logos/System/Logos.exe"
 
   updater:
     extensions: [gnome-3-28]
@@ -95,8 +89,7 @@ parts:
   sommelier-core:
     plugin: make
     source: https://github.com/snapcrafters/sommelier-core.git
-    # source: https://github.com/n8marti/sommelier-core.git # use own repo until PR#26 is merged
-    # source-branch: "1.0" # omit to use "master"
+    source-branch: "1.0" # omit to use "master"
     override-prime: |
       snapcraftctl prime
 
