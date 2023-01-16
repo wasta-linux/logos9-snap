@@ -24,6 +24,7 @@ apps:
       INSTALL_URL: https://downloads.logoscdn.com/LBS9/Installer/9.9.0.0011/Logos-x64.msi
       # INSTALL_FLAGS: /silent # optional commandline flags to pass to the installer
     plugs:
+      - dot-logos-data
       - audio-playback
       - home
       - network
@@ -76,10 +77,19 @@ apps:
     extensions: [gnome-3-28]
     command: bin/sommelier winetricks
     plugs:
+      - dot-cache-winetricks
       # - home
       - network
 
 plugs:
+  dot-logos-data:
+    interface: personal-files
+    write:
+      - $HOME/.logos-data
+  dot-cache-winetricks:
+    interface: personal-files
+    read:
+      - $HOME/.cache/winetricks
   wine-runtime:
     interface: content
     target: $SNAP/wine-runtime
