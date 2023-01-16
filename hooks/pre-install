@@ -8,3 +8,17 @@ if [[ -e "${dl_dir}/Logos-x64.msi" ]]; then
     # Set INSTALL_EXE.
     export INSTALL_EXE="${dl_dir}/Logos-x64.msi"
 fi
+
+WINETRICKS_CACHE="$SNAP_REAL_HOME/.cache/winetricks"
+if [[ -d "$WINETRICKS_CACHE" ]]; then
+    yad --title="Copy existing winetricks cache?" --width=400 --center --auto-kill \
+        --button=gtk-no:1 --button=gtk-yes:0 --borders=15 \
+        --text="You have a winetricks cache folder at $WINETRICKS_CACHE. Do you want to copy the cached files to avoid re-downloading them?"
+    use_winetricks_cache=$?
+    if [[ $use_winetricks_cache -eq 0 ]]; then
+        # Connect snap plug.
+        snap connect logos9:dot-cache-winetricks
+        # Copy contents to snap winetricks cache.
+        cp -rv "${WINETRICKS_CACHE}/"* "${SNAP_USER_COMMON}/.cache/winetricks"
+    fi
+fi
