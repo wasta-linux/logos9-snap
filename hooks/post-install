@@ -21,6 +21,8 @@ if [[ -d "$LOGOS_DATA" || -L "$LOGOS_DATA" ]]; then
         --text="You have a Logos data folder at $LOGOS_DATA. Do you want to link this installation to it?"
     use_logos_data=$?
     if [[ $use_logos_data -eq 0 ]]; then
+        # Connect snap plug.
+        snap connect logos9:dot-logos-data
         # Symlink to $LOGOS_DATA.
         content_dirs=( "Data" "Documents" "Users" )
         for d in "${content_dirs[@]}"; do
